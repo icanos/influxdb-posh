@@ -25,7 +25,12 @@ Function Select-Data {
         [Parameter(Mandatory = $true)]
         [string]$Database,
         [Parameter(Mandatory = $true)]
-        [string]$Query
+        [string]$Query,
+        [Parameter(Mandatory = $false)]
+        [ValidateSet("ns", "u", "ms", "s", "m", "h")]
+        [string]$Epoch = "ns",
+        [Parameter(Mandatory = $false)]
+        [int]$ChunkSize = 10000
     )
 
     if (!$ComputerName.Contains(":")) {
@@ -43,7 +48,7 @@ Function Select-Data {
         return
     }
 
-    $Result = Invoke-WebRequest -Method Get -Uri "http://$ComputerName/query?q=$([System.Web.HttpUtility]::UrlEncode($Query))"
+    $Result = Invoke-WebRequest -Method Get -Uri "http://$ComputerName/query?db=$Database&q=$([System.Web.HttpUtility]::UrlEncode($Query))&epoch=$Epoch&chunk_size=$ChunkSize"
 
     return ($Result | ConvertFrom-Json)
 }
