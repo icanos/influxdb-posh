@@ -1,5 +1,55 @@
 <#
 .SYNOPSIS
+Queries data from InfluxDB
+
+.DESCRIPTION
+Queries data from InfluxDB
+
+.PARAMETER ComputerName
+Name of the server that runs InfluxDB
+
+.PARAMETER Database
+Name of the database to read from
+
+.PARAMETER Query
+SQL like query to retrieve data from the database. Refer to https://docs.influxdata.com/influxdb/v0.9/guides/querying_data/
+for more information about how to write the queries and what differs from traditional SQL.
+
+.EXAMPLE
+Select-Data -ComputerName grafana01 -Database mydatabase -Query "SELECT value FROM cpu_load WHERE dc='hq'"
+#>
+Function Select-Data {
+    Param(
+        [Parameter(Mandatory = $true)]
+        [string]$ComputerName,
+        [Parameter(Mandatory = $true)]
+        [string]$Database,
+        [Parameter(Mandatory = $true)]
+        [string]$Query
+    )
+
+    if (!$ComputerName.Contains(":")) {
+        # Add default port if none specified
+        $ComputerName = "$($ComputerName):8086"
+    }
+
+    if (!$Database) {
+        Write-Error "Missing or invalid database name."
+        return
+    }
+
+    if (!$Query) {
+        Write-Error "Missing or invalid query."
+        return
+    }
+
+    $Result = Invoke-WebRequest -Method Get -Uri "http://$ComputerName/query?q=$([System.Web.HttpUtility]::UrlEncode($Query))"
+
+    return ($Result | ConvertFrom-Json)
+}
+
+<#
+.SYNOPSIS
 Creates a new database in InfluxDB
 
 .DESCRIPTION
