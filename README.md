@@ -1,6 +1,14 @@
 # influxdb-posh
 Powershell module for InfluxDB to insert metrics into one or more series in a database.
 
+Querying data from a database:
+```powershell
+Import-Module InfluxDB
+Select-Data -ComputerName grafana01 -Database metricsdb -Query "SELECT value FROM cpu_load WHERE dc='hq'"
+Select-Data -ComputerName grafana01 -Database metricsdb -Query "SELECT value FROM cpu_load WHERE dc='hq'" -Epoch s
+Select-Data -ComputerName grafana01 -Database metricsdb -Query "SELECT value FROM cpu_load WHERE dc='hq'" -Epoch m -ChunkSize 100
+```
+
 Easily insert new metrics into a database:
 ```powershell
 Import-Module InfluxDB
