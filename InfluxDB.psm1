@@ -15,6 +15,14 @@ Name of the database to read from
 SQL like query to retrieve data from the database. Refer to https://docs.influxdata.com/influxdb/v0.9/guides/querying_data/
 for more information about how to write the queries and what differs from traditional SQL.
 
+.PARAMETER Epoch
+(optional) Everything in InfluxDB is stored and reported in UTC. By default, timestamps are returned in RFC3339 UTC and have 
+nanosecond precision, for example 2015-08-04T19:05:14.318570484Z. If you want timestamps in Unix epoch format include 
+in your request the query string parameter epoch where epoch=[h,m,s,ms,u,ns].
+
+.PARAMETER ChunkSize
+(optional) Set the number of results to be retrieved from the database (defaults to 10,000 items).
+
 .EXAMPLE
 Select-Data -ComputerName grafana01 -Database mydatabase -Query "SELECT value FROM cpu_load WHERE dc='hq'"
 #>
