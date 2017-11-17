@@ -1,5 +1,5 @@
 # influxdb-posh
-Powershell module for InfluxDB to insert metrics into one or more series in a database.
+Community made Powershell module for InfluxDB to work with data in one or more databases directly from the PS console.
 
 Querying data from a database:
 ```powershell
@@ -25,3 +25,5 @@ If you've set up the database on a different port than 8086, you just specify th
 ```powershell
 ... -ComputerName "grafana01:8888" -Database ...
 ```
+
+This repository is in no way affiliated with InfluxData. All use of this module is at your own risk.
